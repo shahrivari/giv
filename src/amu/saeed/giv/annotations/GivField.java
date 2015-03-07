@@ -13,25 +13,5 @@ import java.lang.annotation.Target;
 public @interface GivField {
     public String name() default "";
 
-    public DataType type() default DataType.DEFAULT;
-
-    public enum DataType {
-        DEFAULT,
-        BYTE,
-        SHORT,
-        INT,
-        LONG,
-        FLOAT,
-        DOUBLE,
-        STRING,
-
-        BYTE_ARRAY,
-        BASE64_BYTE_ARRAY,
-        SHORT_ARRAY,
-        INT_ARRAY,
-        LONG_ARRAY,
-        FLOAT_ARRAY,
-        DOUBLE_ARRAY,
-        STRING_ARRAY
-    }
+    public String alias() default "";
 }

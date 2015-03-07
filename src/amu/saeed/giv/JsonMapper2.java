@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,9 +15,9 @@ import java.util.Map;
  */
 public class JsonMapper2 {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
 
-    public String toJson(Object obj) throws IllegalAccessException, GivJsonException, IOException {
+    public String toJson(Object obj) throws IllegalAccessException, GivUnsupportedTypeException, IOException {
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
             boolean skipThis = false;
