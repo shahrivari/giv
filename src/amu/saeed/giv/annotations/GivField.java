@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GivField {
     public String name() default "";
-
     public String alias() default "";
+
+    public boolean skip() default false;
 }

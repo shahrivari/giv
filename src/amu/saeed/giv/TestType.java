@@ -1,7 +1,6 @@
 package amu.saeed.giv;
 
 import amu.saeed.giv.annotations.GivField;
-import amu.saeed.giv.annotations.GivSkip;
 
 import java.util.*;
 
@@ -16,19 +15,23 @@ public class TestType {
     public String name = "Tat\ntat \r lloo http://alalk.com/asdasd/asdasda/s?=&43 <html></html>\"''";
     //@GivField(type = GivField.DataType.BASE64_BYTE_ARRAY)
     public byte[] raw = new byte[]{53, 54};
-    @GivSkip
+
+
+    @GivField(skip = true)
     Set<Integer> set = new HashSet<Integer>() {{
         add(1);
         add(2);
     }};
+
+    @GivField(skip = true)
     Set<Set<Integer>> mset = new HashSet<Set<Integer>>() {{
         add((Set) new HashSet<Integer>());
     }};
+    @GivField(skip = true)
     Map<Integer, String> map = new HashMap<Integer, String>() {{
         put(1, "sa");
     }};
     Date date = new Date();
-    @GivSkip
     String skipthis;
 
 

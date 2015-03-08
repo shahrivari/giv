@@ -1,7 +1,6 @@
 package amu.saeed.giv;
 
 import amu.saeed.giv.annotations.GivField;
-import amu.saeed.giv.annotations.GivSkip;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -36,11 +35,10 @@ public class GivMapper {
 
             Annotation[] annots = field.getAnnotations();
             for (Annotation annot : annots) {
-                if (annot instanceof GivSkip) {
-                    skipThis = true;
-                    break;
-                } else if (annot instanceof GivField) {
+                if (annot instanceof GivField) {
                     GivField givField = (GivField) annot;
+                    if (givField.skip())
+                        skipThis = true;
                     if (!"".equals(givField.name()))
                         fieldName = givField.name();
                 }

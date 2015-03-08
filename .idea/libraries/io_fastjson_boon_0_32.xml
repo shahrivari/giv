@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="io.fastjson:boon:0.32" type="repository">
+    <properties maven-id="io.fastjson:boon:0.32" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/boon-0.32.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/boon-0.32-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

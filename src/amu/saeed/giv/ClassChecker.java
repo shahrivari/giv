@@ -1,6 +1,5 @@
 package amu.saeed.giv;
 
-import amu.saeed.giv.annotations.GivSkip;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -60,10 +59,10 @@ public class ClassChecker {
             Class<?> clazz = field.getType();
             Annotation[] annots = field.getAnnotations();
             for (Annotation annot : annots) {
-                if (annot instanceof GivSkip) {
-                    skipThis = true;
-                    break;
-                }
+//                if (annot instanceof GivSkip) {
+//                    skipThis = true;
+//                    break;
+//                }
             }
             if (skipThis)
                 continue;
