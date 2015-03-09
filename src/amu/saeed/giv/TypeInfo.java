@@ -18,15 +18,13 @@ public class TypeInfo {
         HashSet<String> nameSet = new HashSet();
         ArrayList<FieldInfo> validFields = new ArrayList();
 
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
+        for (Field field : clazz.getDeclaredFields()) {
             boolean skipThis = false;
             field.setAccessible(true);
             Class<?> fieldType = field.getType();
             String fieldName = field.getName();
             String fieldAlias = "";
-            Annotation[] annots = field.getAnnotations();
-            for (Annotation annot : annots) {
+            for (Annotation annot : field.getAnnotations()) {
                 if (annot instanceof GivField) {
                     GivField givField = (GivField) annot;
                     if (givField.skip())

@@ -19,7 +19,6 @@ public class GivMapper {
 
         Map<String, Object> map = new LinkedHashMap<String, Object>();
         for (TypeInfo.FieldInfo fieldinfo : typeInfo.fieldInfos) {
-            boolean skipThis = false;
             Field field = fieldinfo.field;
             Class clazz = fieldinfo.type;
             String fieldName = fieldinfo.name;
@@ -29,7 +28,6 @@ public class GivMapper {
             } catch (IllegalAccessException e) {
                 throw new GivException(e.getMessage());
             }
-
 
             if (clazz.equals(List.class)) {
                 List list = (List) fieldObject;
