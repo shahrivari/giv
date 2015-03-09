@@ -1,31 +1,28 @@
 package amu.saeed.giv;
 
-import amu.saeed.giv.annotations.GivField;
-
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Saeed on 3/6/2015.
  */
 public class GivMapper {
-    private GivMapper() {
+    private Map<Class, TypeInfo> types = new HashMap<Class, TypeInfo>();
+
+    public GivMapper() {
     }
 
-    ;
+    public Map<String, Object> map(Object obj) throws GivException {
+        if (!types.containsKey(obj.getClass()))
+            types.put(obj.getClass(), TypeInfo.buildFromType(obj.getClass()));
+        TypeInfo typeInfo = types.get(obj.getClass());
 
-    public static Map<String, Object> map(Object obj) throws GivException {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for (Field field : fields) {
+        for (TypeInfo.FieldInfo fieldinfo : typeInfo.fieldInfos) {
             boolean skipThis = false;
-            field.setAccessible(true);
-            Class<?> clazz = field.getType();
-            String fieldName = field.getName();
+            Field field = fieldinfo.field;
+            Class clazz = fieldinfo.type;
+            String fieldName = fieldinfo.name;
             Object fieldObject = null;
             try {
                 fieldObject = field.get(obj);
@@ -33,22 +30,8 @@ public class GivMapper {
                 throw new GivException(e.getMessage());
             }
 
-            Annotation[] annots = field.getAnnotations();
-            for (Annotation annot : annots) {
-                if (annot instanceof GivField) {
-                    GivField givField = (GivField) annot;
-                    if (givField.skip())
-                        skipThis = true;
-                    if (!"".equals(givField.name()))
-                        fieldName = givField.name();
-                }
-            }
-            if (skipThis)
-                continue;
 
-            if (!ClassChecker.acceptableTypes.contains(clazz) && !clazz.isEnum())
-                throw new GivUnsupportedTypeException("The class has complex types as field: " + clazz.toString());
-            else if (clazz.equals(List.class)) {
+            if (clazz.equals(List.class)) {
                 List list = (List) fieldObject;
                 for (Object elem : list) {
                     Class<? extends Object> elemclass = elem.getClass();
@@ -74,7 +57,6 @@ public class GivMapper {
                         throw new GivUnsupportedTypeException("The class has a complex type as key in a Map field: " + field.getName() + " element: " + valclass);
                 }
             }
-
 
             if (!map.containsKey(fieldName))
                 map.put(fieldName, fieldObject);

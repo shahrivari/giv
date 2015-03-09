@@ -22,9 +22,10 @@ public class Main {
         stopwatch.reset().start();
 
 
+        GivMapper givMapper = new GivMapper();
         for (int x = 0; x < 10; x++)
             for (TestType t : ll)
-                GivMapper.map(t);
+                givMapper.map(t);
 
         System.out.println("Map Time:" + stopwatch);
         stopwatch.reset().start();
@@ -38,14 +39,14 @@ public class Main {
         System.out.println("Gson Time:" + stopwatch);
         stopwatch.reset().start();
 
-        JsonMapper2 mapper = new JsonMapper2();
-        for (int x = 0; x < 10; x++)
-            for (TestType t : ll) {
-                mapper.toJson(t);
-            }
-
-        System.out.println("Giv Time:" + stopwatch);
-        stopwatch.reset().start();
+//        JsonMapper2 mapper = new JsonMapper2();
+//        for (int x = 0; x < 10; x++)
+//            for (TestType t : ll) {
+//                mapper.toJson(t);
+//            }
+//
+//        System.out.println("Giv Time:" + stopwatch);
+//        stopwatch.reset().start();
 
 
 //
