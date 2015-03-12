@@ -1,8 +1,6 @@
 package amu.saeed.giv;
 
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -49,53 +47,28 @@ public class ClassChecker {
         add(Double[].class);
         add(String[].class);
         add(Date[].class);
+
+        //Collections
+        add(List.class);
+        add(Set.class);
+        add(Map.class);
     }});
 
-    static public boolean isSimple(Object obj) throws GivException {
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            boolean skipThis = false;
-            field.setAccessible(true);
-            Class<?> clazz = field.getType();
-            Annotation[] annots = field.getAnnotations();
-            for (Annotation annot : annots) {
-//                if (annot instanceof GivSkip) {
-//                    skipThis = true;
-//                    break;
-//                }
-            }
-            if (skipThis)
-                continue;
-            if (clazz.isEnum())
-                continue;
-            if (!acceptableTypes.contains(clazz))
-                return false;
+    public static Set<Class> acceptableKeyTypes = Collections.unmodifiableSet(new HashSet<Class>() {{
+        //primitives
+        add(Character.class);
+        add(Integer.class);
+        add(Long.class);
+        add(Double.class);
+        add(String.class);
+    }});
 
-            try {
-                if (clazz.equals(Collection.class)) {
-                    Collection col = (Collection) field.get(obj);
-                    if (col.size() > 0 && !acceptableTypes.contains(col.iterator().next().getClass()))
-                        return false;
-                } else if (clazz.equals(List.class)) {
-                    List col = (List) field.get(obj);
-                    if (col.size() > 0 && !acceptableTypes.contains(col.iterator().next().getClass()))
-                        return false;
-                } else if (clazz.equals(Set.class)) {
-                    Set col = (Set) field.get(obj);
-                    if (col.size() > 0 && !acceptableTypes.contains(col.iterator().next().getClass()))
-                        return false;
-                } else if (clazz.equals(Map.class)) {
-//                        Map col = (Map) field.get(obj);
-//                        if(col.size()>0&&!acceptableTypes.contains(col.iterator().next().getClass()))
-//                            return false;
-                }
-
-            } catch (IllegalAccessException e) {
-                throw new GivException(e.getMessage());
-            }
-
-
-        }
-        return true;
+    public static boolean isAcceptableType(Class clazz) {
+        return acceptableTypes.contains(clazz) || clazz.isEnum();
     }
+
+    public static boolean isAcceptableKeyType(Class clazz) {
+        return acceptableKeyTypes.contains(clazz) || clazz.isEnum();
+    }
+
 }

@@ -1,6 +1,5 @@
 package amu.saeed.giv;
 
-
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

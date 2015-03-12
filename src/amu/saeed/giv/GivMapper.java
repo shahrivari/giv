@@ -18,40 +18,45 @@ public class GivMapper {
         TypeInfo typeInfo = types.get(obj.getClass());
 
         Map<String, Object> map = new LinkedHashMap<String, Object>();
+
         for (TypeInfo.FieldInfo fieldinfo : typeInfo.fieldInfos) {
             Field field = fieldinfo.field;
             Class clazz = fieldinfo.type;
             String fieldName = fieldinfo.name;
             Object fieldObject = null;
+
             try {
                 fieldObject = field.get(obj);
             } catch (IllegalAccessException e) {
                 throw new GivException(e.getMessage());
             }
 
+            if (!ClassChecker.isAcceptableType(clazz))
+                throw new GivUnsupportedTypeException("The field: " + field.getName() + " has complex type: " + clazz);
+
             if (clazz.equals(List.class)) {
                 List list = (List) fieldObject;
                 for (Object elem : list) {
-                    Class<? extends Object> elemclass = elem.getClass();
-                    if (!ClassChecker.acceptableTypes.contains(elemclass) && !elemclass.isEnum())
+                    Class elemclass = elem.getClass();
+                    if (!ClassChecker.isAcceptableType(clazz))
                         throw new GivUnsupportedTypeException("The class has a complex type in a List field: " + field.getName() + " element: " + elemclass);
                 }
             } else if (clazz.equals(Set.class)) {
                 Set set = (Set) fieldObject;
                 for (Object elem : set) {
-                    Class<? extends Object> elemclass = elem.getClass();
-                    if (!ClassChecker.acceptableTypes.contains(elemclass) && !elemclass.isEnum())
+                    Class elemclass = elem.getClass();
+                    if (!ClassChecker.isAcceptableType(clazz))
                         throw new GivUnsupportedTypeException("The class has a complex type in a Set field: " + field.getName() + " element: " + elemclass);
                 }
             } else if (clazz.equals(Map.class)) {
                 Map m = (Map) fieldObject;
                 for (Object memobj : m.entrySet()) {
                     Map.Entry entry = (Map.Entry) memobj;
-                    Class<? extends Object> keyclass = entry.getKey().getClass();
-                    if (!ClassChecker.acceptableTypes.contains(keyclass) && !keyclass.isEnum())
+                    Class keyclass = entry.getKey().getClass();
+                    if (!ClassChecker.isAcceptableKeyType(keyclass))
                         throw new GivUnsupportedTypeException("The class has a complex type as key in a Map field: " + field.getName() + " element: " + keyclass);
-                    Class<? extends Object> valclass = entry.getValue().getClass();
-                    if (!ClassChecker.acceptableTypes.contains(valclass) && !valclass.isEnum())
+                    Class valclass = entry.getValue().getClass();
+                    if (!ClassChecker.isAcceptableType(keyclass))
                         throw new GivUnsupportedTypeException("The class has a complex type as key in a Map field: " + field.getName() + " element: " + valclass);
                 }
             }
